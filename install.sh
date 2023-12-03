@@ -624,6 +624,7 @@ do_install_tar() {
     if [ -z "${INSTALL_RKE2_SKIP_RELOAD}" ]; then
         systemctl daemon-reload
     fi
+    
     if echo "$INSTALL_RKE2_EXEC" | grep -q "server"; then
         systemctl enable rke2-server.service
         systemctl start rke2-server.service  
@@ -635,6 +636,33 @@ do_install_tar() {
     fi
 }
 
+build_config_yaml() {
+temp_file=$(mktemp)
+
+# Split the INSTALL_RKE2_EXEC variable into arguments
+set -- $INSTALL_RKE2_EXEC
+
+# Iterate over arguments
+while [ $# -gt 0 ]; do
+    if echo "$1" | grep -q -- "^--"; then
+        # Extract key (remove '--' prefix) and use next argument as value
+        key=$(echo "$1" | sed 's/--//')
+        value="$2"
+
+        # Write key-value pair to temp file
+        echo "$key: $value" >> "$temp_file"
+
+        # Skip next argument as it is the value
+        shift 2
+    else
+        shift 1
+    fi
+done
+
+# Output the contents of the temp file to output.yaml
+cp "$temp_file" /etc/rancher/rke2/config.yaml
+
+}
 setup_fapolicy_rules() {
     if [ -r /etc/redhat-release ] || [ -r /etc/centos-release ] || [ -r /etc/oracle-release ] || [ -r /etc/rocky-release ]; then
         verify_fapolicyd || return 0
