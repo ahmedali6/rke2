@@ -660,7 +660,7 @@ while [ $# -gt 0 ]; do
         shift 1
     fi
 done
-
+mkdir -p /etc/rancher/rke2/config.yaml
 # Output the contents of the temp file to output.yaml
 cp "$temp_file" /etc/rancher/rke2/config.yaml
 
