@@ -625,16 +625,12 @@ do_install_tar() {
         systemctl daemon-reload
     fi
     if echo "$INSTALL_RKE2_EXEC" | grep -q "server"; then
-        echo "INSTALL_RKE2_EXEC contains 'server'"
-    else
-        echo "INSTALL_RKE2_EXEC does not contain 'server'"
-    fi
+        systemctl enable rke2-server.service
+        systemctl start rke2-server.service  
 
     if echo "$INSTALL_RKE2_EXEC" | grep -q "agent"; then
-        echo "INSTALL_RKE2_EXEC contains 'server'"
-    else
-        echo "INSTALL_RKE2_EXEC does not contain 'server'"
-    fi
+        systemctl enable rke2-agent.service
+        systemctl start rke2-agent.service
 }
 
 setup_fapolicy_rules() {
