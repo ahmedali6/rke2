@@ -620,7 +620,8 @@ do_install_tar() {
     install_airgap_tarball
     verify_tarball
     unpack_tarball
-
+    build_config_yaml
+    
     if [ -z "${INSTALL_RKE2_SKIP_RELOAD}" ]; then
         systemctl daemon-reload
     fi
@@ -637,6 +638,7 @@ do_install_tar() {
 }
 
 build_config_yaml() {
+info "Building config.yaml"
 temp_file=$(mktemp)
 
 # Split the INSTALL_RKE2_EXEC variable into arguments
