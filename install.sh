@@ -626,12 +626,12 @@ do_install_tar() {
         systemctl daemon-reload
     fi
     
-    if echo "$INSTALL_RKE2_EXEC" | grep -q "server"; then
+    if echo "$INSTALL_RKE2_EXEC" | grep -q "server "; then
         systemctl enable rke2-server.service
         systemctl start rke2-server.service  
     fi
 
-    if echo "$INSTALL_RKE2_EXEC" | grep -q "agent"; then
+    if echo "$INSTALL_RKE2_EXEC" | grep -q "agent "; then
         systemctl enable rke2-agent.service
         systemctl start rke2-agent.service
     fi
