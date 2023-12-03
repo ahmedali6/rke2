@@ -624,6 +624,17 @@ do_install_tar() {
     if [ -z "${INSTALL_RKE2_SKIP_RELOAD}" ]; then
         systemctl daemon-reload
     fi
+    if [[ $INSTALL_RKE2_EXEC == *"server"* ]]; then
+        echo "INSTALL_RKE2_EXEC contains 'server'"
+    else
+        echo "INSTALL_RKE2_EXEC does not contain 'server'"
+    fi
+
+     if [[ $INSTALL_RKE2_EXEC == *"agent"* ]]; then
+        echo "INSTALL_RKE2_EXEC contains 'agent'"
+    else
+        echo "INSTALL_RKE2_EXEC does not contain 'agent'"
+    fi
 }
 
 setup_fapolicy_rules() {
