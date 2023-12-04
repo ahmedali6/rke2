@@ -144,6 +144,10 @@ setup_env() {
     fi
 }
 
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
 # check_method_conflict will exit with an error if the user attempts to install
 # via tar method on a host with existing RPMs.
 check_method_conflict() {
@@ -647,9 +651,9 @@ do_install_tar() {
     fi
 
     if command_exists iscsiadm; then
-    info "open-iscsi is already installed."
+        echo "open-iscsi is already installed."
     else
-    info "open-iscsi not found. Attempting to install..."
+        echo "open-iscsi not found. Attempting to install..."
 
         # Identify the package manager and install open-iscsi
         if command_exists apt-get; then
@@ -669,15 +673,12 @@ do_install_tar() {
             # For systems with Pacman (like Arch Linux)
             pacman -Syu open-iscsi
         else
-            fatal "Package manager not found. Cannot install open-iscsi."
+            echo "Package manager not found. Cannot install open-iscsi."
+            exit 1
         fi
 
-    infor "open-iscsi installation attempted."
+        echo "open-iscsi installation attempted."
     fi
-}
-
-command_exists() {
-    type "$1" &> /dev/null ;
 }
 
 build_config_yaml() {
