@@ -112,9 +112,17 @@ setup_env() {
     fi
 
     # --- make sure install type has a value
-    if [ -z "${INSTALL_RKE2_TYPE}" ]; then
-        INSTALL_RKE2_TYPE="${INSTALL_RKE2_EXEC:-server}"
+    if echo "$INSTALL_RKE2_EXEC" | grep -q "agent"; then
+        INSTALL_RKE2_TYPE=agent
     fi
+
+    if echo "$INSTALL_RKE2_EXEC" | grep -q "server"  && ! echo "$INSTALL_RKE2_EXEC" | grep -q "agent"; then
+        INSTALL_RKE2_TYPE=server
+    fi
+
+    # if [ -z "${INSTALL_RKE2_TYPE}" ]; then
+    #     INSTALL_RKE2_TYPE="${INSTALL_RKE2_EXEC:-server}"
+    # fi
 
     # --- use rpm install method if available by default
     if [ -z "${INSTALL_RKE2_ARTIFACT_PATH}" ] && [ -z "${INSTALL_RKE2_COMMIT}" ] && [ -z "${INSTALL_RKE2_METHOD}" ] && command -v yum >/dev/null 2>&1; then
