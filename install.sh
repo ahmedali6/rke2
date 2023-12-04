@@ -645,6 +645,39 @@ do_install_tar() {
         systemctl enable rke2-server.service
         systemctl start rke2-server.service  
     fi
+
+    if command_exists iscsiadm; then
+    info "open-iscsi is already installed."
+    else
+    info "open-iscsi not found. Attempting to install..."
+
+        # Identify the package manager and install open-iscsi
+        if command_exists apt-get; then
+            # For systems with APT (like Ubuntu, Debian)
+            apt-get update
+            apt-get install -y open-iscsi
+        elif command_exists yum; then
+            # For systems with YUM (like RHEL, CentOS)
+            yum install -y open-iscsi
+        elif command_exists dnf; then
+            # For systems with DNF (like newer Fedora)
+            dnf install -y open-iscsi
+        elif command_exists zypper; then
+            # For systems with Zypper (like openSUSE)
+            zypper install -y open-iscsi
+        elif command_exists pacman; then
+            # For systems with Pacman (like Arch Linux)
+            pacman -Syu open-iscsi
+        else
+            fatal "Package manager not found. Cannot install open-iscsi."
+        fi
+
+    infor "open-iscsi installation attempted."
+    fi
+}
+
+command_exists() {
+    type "$1" &> /dev/null ;
 }
 
 build_config_yaml() {
