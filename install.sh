@@ -102,9 +102,9 @@ setup_env() {
     INSTALL_RKE2_GITHUB_URL="https://github.com/rancher/rke2"
     DEFAULT_TAR_PREFIX="/usr/local"
     # --- bail if we are not root ---
-    if [ ! $(id -u) -eq 0 ]; then
-        fatal "You need to be root to perform this install"
-    fi
+    # if [ ! $(id -u) -eq 0 ]; then
+    #     fatal "You need to be root to perform this install"
+    # fi
 
     # --- make sure install channel has a value
     if [ -z "${INSTALL_RKE2_CHANNEL}" ]; then
